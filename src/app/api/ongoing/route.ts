@@ -1,3 +1,7 @@
+import {
+  responseErrorWithMessage,
+  responseSuccessWithData,
+} from "@/lib/Response";
 import ScrapMethod from "@/lib/ScrapMethod";
 import { NextResponse } from "next/server";
 
@@ -8,20 +12,15 @@ export async function GET(req: Request) {
 
   try {
     const data = await ScrapMethod({
-        order_by,
-        page,
-        type: "ongoing"
+      order_by,
+      page,
+      type: "ongoing",
     });
 
-    return NextResponse.json({
-      message: "Success Get OnGoing Data!",
-      data,
-    });
+    return NextResponse.json(responseSuccessWithData(data));
   } catch (error) {
     console.log("OnGoing Error: ", error);
 
-    return NextResponse.json({
-      message: "Terjadi Kesalahan Pada Server!",
-    });
+    return NextResponse.json(responseErrorWithMessage());
   }
 }
