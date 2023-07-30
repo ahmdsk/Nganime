@@ -12,18 +12,31 @@ export interface IResMovie {
   }>;
 }
 
+export enum AnimeType {
+  ongoing = "ongoing",
+  onfinished = "onfinished",
+  search = "search"
+}
+
 export interface IProps {
   order_by?: string;
   page?: number | string;
-  type: string;
+  type: AnimeType;
+  query?: string;
 }
 
 export const baseURL = SiteConfig.scrapUrl;
 
 export default async function ScrapMethod(props: IProps) {
-  const rawResponse = await fetch(
-    `${baseURL}/anime/${props.type}?order_by=${props.order_by}&page=${props.page}`
-  );
+  let url = `${baseURL}/anime/${props.type}?order_by=${props.order_by}&page=${props.page}`;
+
+  if(props.type === AnimeType.search) {
+    if(props.query !== "") {
+      url = `${baseURL}/anime?search=${props.query}&order_by=${props.order_by}&page=${props.page}`;
+    }
+  }
+
+  const rawResponse = await fetch(url);
   const html = await rawResponse.text();
 
   const $ = cheerio.load(html);

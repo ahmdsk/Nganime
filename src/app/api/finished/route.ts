@@ -2,7 +2,7 @@ import {
   responseSuccessWithData,
   responseErrorWithMessage,
 } from "@/lib/Response";
-import ScrapMethod from "@/lib/ScrapMethod";
+import ScrapMethod, { AnimeType } from "@/lib/ScrapMethod";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -14,7 +14,7 @@ export async function GET(req: Request) {
     const data = await ScrapMethod({
       order_by,
       page,
-      type: "finished",
+      type: AnimeType.onfinished,
     });
 
     return NextResponse.json(responseSuccessWithData(data));
